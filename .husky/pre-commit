@@ -1,0 +1,16 @@
+#!/bin/sh
+
+for FILE in `git diff --name-only --cached`; do
+	if [[ $FILE == *"pre-commit"* ]]
+	then
+		continue
+	fi
+
+    grep 'TODO\|todo' $FILE 2>&1 >/dev/null
+
+    if [ $? -eq 0 ]; then
+        echo $FILE ' 文件中有 TODO，请删除后再提交'
+        exit 1
+    fi
+done
+exit
